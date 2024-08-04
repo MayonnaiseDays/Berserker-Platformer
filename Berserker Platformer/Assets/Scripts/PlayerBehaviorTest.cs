@@ -85,8 +85,10 @@ public class PlayerBehaviorTest : MonoBehaviour
         jumpInputReleased = false;
     }
 
+/*
     private bool IsGrounded()
     {
         return Physics2D.OverlapCircle(groundSensor.position, 0.2f, groundlayer);
     }
+*/
 }
