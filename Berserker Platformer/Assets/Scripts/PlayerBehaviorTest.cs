@@ -13,11 +13,27 @@ public class PlayerBehaviorTest : MonoBehaviour
     float velPower = 1.15f;
     float frictionAmount = .2f;
     float jumpForce = 16f;
+    float jumpCutMultiplier = .4f;
+
+    //amount of time you can fall off a ledge and still jump
+    float jumpCoyoteTime = .2f;
+    //amount of time to buffer a jump
+    float jumpBufferTime = .1f;
+    float fallGravityMultiplier = 1.5f;
     float lastGroundedTime;
     float lastJumpTime;
     bool isJumping;
     bool jumpInputReleased;
-    #endregion Variables
+    
+    
+    
+    //gotta look into this more
+    float gravityScale = 3f;
+
+    [SerializeField] private Transform groundSensor;
+    [SerializeField] private LayerMask groundlayer;
+
+    #endregion
 
 
     [SerializeField] private Rigidbody2D rb;
@@ -32,7 +48,57 @@ public class PlayerBehaviorTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         moveInput = Input.GetAxisRaw("Horizontal");
+
+        //if Grounded
+        if (Physics2D.OverlapCircle(groundSensor.position, 0f, groundlayer) && Mathf.Abs(rb.velocity.y) < 0.1f)
+        {   
+            
+            //reset the coyote timer
+            lastGroundedTime = jumpCoyoteTime;
+            isJumping = false; 
+        }  
+        
+        //coyote timers
+        lastGroundedTime -= Time.deltaTime;
+        lastJumpTime -= Time.deltaTime;
+
+        #region Jump
+
+        if(Input.GetKeyDown("space"))
+        {
+            lastJumpTime = jumpBufferTime;
+        }
+
+        //when space is pressed and its been within (var) seconds since you left the floor
+        //and its been within (var) seconds since last jumped(this is more for double jumps or possible jump buffers)
+        //and the reason you are midair is not because you pressed jump
+
+        if (lastGroundedTime > 0f && lastJumpTime > 0f && !isJumping)
+        {
+            //go up
+            Jump();
+        }
+        if (Input.GetKeyUp("space"))
+            onJumpRelease();
+        
+        #endregion 
+
+        //fast fall like fox in smash
+        #region Jump Gravity
+        //if youre falling
+        if (rb.velocity.y < 0)
+        {
+            //fall faster
+            rb.gravityScale = gravityScale * fallGravityMultiplier;
+        }
+        else
+        {
+            //otherwise(when jumping), go up normally
+            rb.gravityScale = gravityScale;
+        }
+        #endregion
     }
 
     private void FixedUpdate()
@@ -58,10 +124,10 @@ public class PlayerBehaviorTest : MonoBehaviour
 
         #endregion
 
-       /* #region Friction
+        #region Friction       COMMENTED OUT CAUSE I DONT GET INPUTHANDLER
 
         //check if grounded and no keys pressed
-        if (lastGroundedTime > 0 && Mathf.Abs(InputHandler.instance.MoveInput) < .01f)
+        if (lastGroundedTime > 0 && Mathf.Abs(moveInput) < .01f)
         {
             //thne use either friction amount or velocity
             float amount = Mathf.Min(Mathf.Abs(rb.velocity.x), Mathf.Abs(frictionAmount));
@@ -71,24 +137,33 @@ public class PlayerBehaviorTest : MonoBehaviour
             rb.AddForce(Vector2.right * -amount, ForceMode2D.Impulse);
         }
 
-        #endregion Friction*/
+        #endregion Friction
         
     }
 
     private void Jump()
     {
         //apply impulse force
-        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse); 
         lastGroundedTime = 0;
         lastJumpTime = 0;
         isJumping = true;
         jumpInputReleased = false;
+    
     }
 
-/*
-    private bool IsGrounded()
+    public void onJumpRelease()
     {
-        return Physics2D.OverlapCircle(groundSensor.position, 0.2f, groundlayer);
+        //if you let go of space and your jump is going up and the reason youre going up is because you jumped
+        if (rb.velocity.y > 0f && isJumping)
+        {
+            
+            rb.AddForce(Vector2.down * rb.velocity.y * (1 - jumpCutMultiplier), ForceMode2D.Impulse);
+        }
+
+        jumpInputReleased = true;
+        lastJumpTime = 0;
     }
-*/
+    
+
 }
