@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class Settings : MonoBehaviour
 {
+
     public void ExitSettings(){
-        SceneManager.LoadSceneAsync("Main Menu");
+            gameObject.SetActive(false);
     }
 }

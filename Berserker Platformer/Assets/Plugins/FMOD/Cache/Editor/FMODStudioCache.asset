@@ -15,7 +15,7 @@ MonoBehaviour:
   Path: Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638583307988008015
+  lastModified: 638586679610969610
   FileSizes:
   - Name: 
     Value: 762
@@ -35,7 +35,7 @@ MonoBehaviour:
   Path: Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638583307988008015
+  lastModified: 638586679610964600
   FileSizes: []
   Exists: 1
 --- !u!114 &11400000
@@ -60,7 +60,7 @@ MonoBehaviour:
   - {fileID: -7255467411532244766}
   StringsBanks:
   - {fileID: -8679281474840020658}
-  cacheTime: 638583307988008015
+  cacheTime: 638586679610969610
   cacheVersion: 131619
 --- !u!114 &7298901543666998278
 MonoBehaviour:
