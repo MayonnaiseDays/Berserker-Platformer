@@ -11,7 +11,7 @@ public class PlayerBehaviorTest : MonoBehaviour
     float acceleration = 6f;
     float deceleration = 3f;
     float velPower = 1.15f;
-    //float frictionAmount = .2f;
+    float frictionAmount = .2f;
     float jumpForce = 16f;
     float jumpCutMultiplier = .4f;
 
@@ -19,7 +19,7 @@ public class PlayerBehaviorTest : MonoBehaviour
     float jumpCoyoteTime = .2f;
     //amount of time to buffer a jump
     float jumpBufferTime = .1f;
-    float fallGravityMultiplier = 2f;
+    float fallGravityMultiplier = 1.5f;
     float lastGroundedTime;
     float lastJumpTime;
     bool isJumping;
@@ -28,7 +28,7 @@ public class PlayerBehaviorTest : MonoBehaviour
     
     
     //gotta look into this more
-    float gravityScale = 2f;
+    float gravityScale = 3f;
 
     [SerializeField] private Transform groundSensor;
     [SerializeField] private LayerMask groundlayer;
@@ -48,6 +48,7 @@ public class PlayerBehaviorTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         moveInput = Input.GetAxisRaw("Horizontal");
 
         //if Grounded
@@ -123,10 +124,10 @@ public class PlayerBehaviorTest : MonoBehaviour
 
         #endregion
 
-       /* #region Friction       COMMENTED OUT CAUSE I DONT GET INPUTHANDLER
+        #region Friction       COMMENTED OUT CAUSE I DONT GET INPUTHANDLER
 
         //check if grounded and no keys pressed
-        if (lastGroundedTime > 0 && Mathf.Abs(InputHandler.instance.MoveInput) < .01f)
+        if (lastGroundedTime > 0 && Mathf.Abs(moveInput) < .01f)
         {
             //thne use either friction amount or velocity
             float amount = Mathf.Min(Mathf.Abs(rb.velocity.x), Mathf.Abs(frictionAmount));
@@ -136,7 +137,7 @@ public class PlayerBehaviorTest : MonoBehaviour
             rb.AddForce(Vector2.right * -amount, ForceMode2D.Impulse);
         }
 
-        #endregion Friction*/
+        #endregion Friction
         
     }
 
