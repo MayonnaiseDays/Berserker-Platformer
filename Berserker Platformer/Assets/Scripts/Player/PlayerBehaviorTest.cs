@@ -33,10 +33,20 @@ public class PlayerBehaviorTest : MonoBehaviour
     [SerializeField] private Transform groundSensor;
     [SerializeField] private LayerMask groundlayer;
 
+    bool canDash = true;
+    bool isDashing;
+    float dashingPower = 24f;
+    float dashingTime = .2f;
+    float dashingCooldown = .1f;
+
+    [SerializeField] TrailRenderer tr;
+    [SerializeField] private Rigidbody2D rb;
+
+
     #endregion
 
 
-    [SerializeField] private Rigidbody2D rb;
+    
     
 
     // Start is called before the first frame update
@@ -48,7 +58,17 @@ public class PlayerBehaviorTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (isDashing)
+        {
+            //basically dont take most of the inputs
+            //maybe have a coyote time for dashing to decode if its an up dash
+
+
+
+            return;
+
+        }
+
         moveInput = Input.GetAxisRaw("Horizontal");
 
         //if Grounded
@@ -99,10 +119,19 @@ public class PlayerBehaviorTest : MonoBehaviour
             rb.gravityScale = gravityScale;
         }
         #endregion
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
+        {
+            StartCoroutine(Dash());
+        }
     }
 
     private void FixedUpdate()
     {
+        //Attention! may need to attach
+        //if(isDashing)
+        //return;
+        //if theres anything happening thats not supposed to during dashing
         #region Run
 
         //calculate directio nand velocity
@@ -165,5 +194,22 @@ public class PlayerBehaviorTest : MonoBehaviour
         lastJumpTime = 0;
     }
     
+    #region Dash
+    public IEnumerator Dash()
+    {
+        canDash = false;
+        isDashing = true;
+        float originalGravity = rb.gravityScale;
+        rb.gravityScale = 0f;
+        rb.velocity = new Vector2(transform.localScale.x * dashingPower, 0f);
+        tr.emitting = true;
+        yield return new WaitForSeconds(dashingTime);
+        tr.emitting = false;
+        rb.gravityScale = originalGravity;
+        isDashing = false;
+        yield return new WaitForSeconds(dashingCooldown);
+        canDash = true;
+    } 
+    #endregion
 
 }
