@@ -36,8 +36,10 @@ public class PlayerBehaviorTest : MonoBehaviour
     bool canDash = true;
     bool isDashing;
     float dashingPower = 24f;
-    float dashingTime = .2f;
+    float dashingTime = .3f;
     float dashingCooldown = .1f;
+    float lastUpDashTime;
+    float upDashBufferTime = .1f;
 
     [SerializeField] TrailRenderer tr;
     [SerializeField] private Rigidbody2D rb;
@@ -58,16 +60,31 @@ public class PlayerBehaviorTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        #region DashInput
+        //if you press w even before dashing, allow up dash anyways
+        if (Input.GetKeyDown("w"))
+        {
+            lastUpDashTime = upDashBufferTime;
+        }
+        if (lastUpDashTime > 0f && canDash)
+        {
+            //add code
+        }
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
+        {
+            StartCoroutine(Dash());
+        }
         if (isDashing)
         {
             //basically dont take most of the inputs
             //maybe have a coyote time for dashing to decode if its an up dash
-
+            
 
 
             return;
 
         }
+        #endregion
 
         moveInput = Input.GetAxisRaw("Horizontal");
 
@@ -75,7 +92,7 @@ public class PlayerBehaviorTest : MonoBehaviour
         if (Physics2D.OverlapCircle(groundSensor.position, 0f, groundlayer) && Mathf.Abs(rb.velocity.y) < 0.1f)
         {   
             
-            //reset the coyote timer
+            //restart the coyote timer
             lastGroundedTime = jumpCoyoteTime;
             isJumping = false; 
         }  
@@ -84,7 +101,7 @@ public class PlayerBehaviorTest : MonoBehaviour
         lastGroundedTime -= Time.deltaTime;
         lastJumpTime -= Time.deltaTime;
 
-        #region Jump
+        #region Jump Input
 
         if(Input.GetKeyDown("space"))
         {
@@ -106,7 +123,7 @@ public class PlayerBehaviorTest : MonoBehaviour
         #endregion 
 
         //fast fall like fox in smash
-        #region Jump Gravity
+        #region Fast Fall
         //if youre falling
         if (rb.velocity.y < 0)
         {
@@ -120,19 +137,16 @@ public class PlayerBehaviorTest : MonoBehaviour
         }
         #endregion
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
-        {
-            StartCoroutine(Dash());
-        }
+
     }
 
     private void FixedUpdate()
     {
         //Attention! may need to attach
-        //if(isDashing)
-        //return;
+        if(isDashing)
+            return;
         //if theres anything happening thats not supposed to during dashing
-        #region Run
+        #region Actual Movement
 
         //calculate directio nand velocity
         float targetSpeed = moveInput * moveSpeed;
@@ -153,7 +167,7 @@ public class PlayerBehaviorTest : MonoBehaviour
 
         #endregion
 
-        #region Friction       COMMENTED OUT CAUSE I DONT GET INPUTHANDLER
+        #region Friction 
 
         //check if grounded and no keys pressed
         if (lastGroundedTime > 0 && Mathf.Abs(moveInput) < .01f)
@@ -201,6 +215,7 @@ public class PlayerBehaviorTest : MonoBehaviour
         isDashing = true;
         float originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
+        //maybe change this to addforce impulse
         rb.velocity = new Vector2(transform.localScale.x * dashingPower, 0f);
         tr.emitting = true;
         yield return new WaitForSeconds(dashingTime);
@@ -210,6 +225,12 @@ public class PlayerBehaviorTest : MonoBehaviour
         yield return new WaitForSeconds(dashingCooldown);
         canDash = true;
     } 
+
+    /*public IEnumerator UpDash()
+    {
+        
+    }*/
+
     #endregion
 
 }
