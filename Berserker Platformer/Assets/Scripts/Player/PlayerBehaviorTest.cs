@@ -23,7 +23,7 @@ public class PlayerBehaviorTest : MonoBehaviour
     float lastGroundedTime;
     float lastJumpTime;
     bool isJumping;
-    bool jumpInputReleased;
+    //bool jumpInputReleased;
     
     
     
@@ -35,11 +35,16 @@ public class PlayerBehaviorTest : MonoBehaviour
 
     bool canDash = true;
     bool isDashing;
+    bool isUpDashing;
+    float originalGravity;
     float dashingPower = 24f;
     float dashingTime = .3f;
     float dashingCooldown = .1f;
+    //pressed updash too early timer
     float lastUpDashTime;
     float upDashBufferTime = .1f;
+    float stillCanUpDashTime;
+    float upDashCoyoteTime = .2f;
 
     [SerializeField] TrailRenderer tr;
     [SerializeField] private Rigidbody2D rb;
@@ -62,23 +67,40 @@ public class PlayerBehaviorTest : MonoBehaviour
     {
         #region DashInput
         //if you press w even before dashing, allow up dash anyways
-        if (Input.GetKeyDown("w"))
+        
+        
+        if (Input.GetKey("w"))
         {
             lastUpDashTime = upDashBufferTime;
         }
-        if (lastUpDashTime > 0f && canDash)
+        /*if (lastUpDashTime > 0f && canDash)
         {
             //add code
-        }
+            StartCoroutine(UpDash());
+        }*/
         if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
         {
-            StartCoroutine(Dash());
+            if (lastUpDashTime > 0f)
+            {
+                StartCoroutine(UpDash());
+            }
+            else
+            {
+                StartCoroutine(Dash());
+                stillCanUpDashTime = upDashCoyoteTime;
+            }
         }
-        if (isDashing)
+        if (isDashing || isUpDashing)
         {
+            lastUpDashTime -= Time.deltaTime;
+            stillCanUpDashTime -= Time.deltaTime;
             //basically dont take most of the inputs
             //maybe have a coyote time for dashing to decode if its an up dash
-            
+            if (stillCanUpDashTime > 0f && Input.GetKeyDown("w"))
+            {
+                StartCoroutine(UpDash());
+            }
+
 
 
             return;
@@ -100,6 +122,9 @@ public class PlayerBehaviorTest : MonoBehaviour
         //coyote timers
         lastGroundedTime -= Time.deltaTime;
         lastJumpTime -= Time.deltaTime;
+        stillCanUpDashTime -= Time.deltaTime;
+        lastUpDashTime -= Time.deltaTime;
+        
 
         #region Jump Input
 
@@ -143,7 +168,7 @@ public class PlayerBehaviorTest : MonoBehaviour
     private void FixedUpdate()
     {
         //Attention! may need to attach
-        if(isDashing)
+        if(isDashing || isUpDashing)
             return;
         //if theres anything happening thats not supposed to during dashing
         #region Actual Movement
@@ -191,7 +216,7 @@ public class PlayerBehaviorTest : MonoBehaviour
         lastGroundedTime = 0;
         lastJumpTime = 0;
         isJumping = true;
-        jumpInputReleased = false;
+        //jumpInputReleased = false;
     
     }
 
@@ -204,7 +229,7 @@ public class PlayerBehaviorTest : MonoBehaviour
             rb.AddForce(Vector2.down * rb.velocity.y * (1 - jumpCutMultiplier), ForceMode2D.Impulse);
         }
 
-        jumpInputReleased = true;
+        //jumpInputReleased = true;
         lastJumpTime = 0;
     }
     
@@ -213,7 +238,7 @@ public class PlayerBehaviorTest : MonoBehaviour
     {
         canDash = false;
         isDashing = true;
-        float originalGravity = rb.gravityScale;
+        originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
         //maybe change this to addforce impulse
         rb.velocity = new Vector2(transform.localScale.x * dashingPower, 0f);
@@ -226,11 +251,22 @@ public class PlayerBehaviorTest : MonoBehaviour
         canDash = true;
     } 
 
-    /*public IEnumerator UpDash()
+    public IEnumerator UpDash()
     {
-        
-    }*/
-
+        canDash = false;
+        isUpDashing = true;
+        originalGravity = rb.gravityScale;
+        rb.gravityScale = 0f;
+        //30 60 90 triangle if hypothenuse is 1
+        rb.velocity = new Vector2(transform.localScale.x * dashingPower * .865f, transform.localScale.x * dashingPower * .5f);
+        tr.emitting = true;
+        yield return new WaitForSeconds(dashingTime);
+        tr.emitting = false;
+        rb.gravityScale = originalGravity;
+        isUpDashing = false;
+        yield return new WaitForSeconds(dashingCooldown);
+        canDash = true;
+    }
     #endregion
 
 }
