@@ -303,6 +303,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2545170376652669255, guid: f295f8c43c8e7da469d20f54471f51c8, type: 3}
+      propertyPath: settingsMenu
+      value: 
+      objectReference: {fileID: 1847994106}
     - target: {fileID: 8700099913152983625, guid: f295f8c43c8e7da469d20f54471f51c8, type: 3}
       propertyPath: m_Name
       value: Level Selection UI
@@ -594,10 +598,15 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1896231971262778889, guid: e41e4c24fc130c044979013442840971, type: 3}
   m_PrefabInstance: {fileID: 1847994104}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1847994106 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8700099913152983625, guid: e41e4c24fc130c044979013442840971, type: 3}
+  m_PrefabInstance: {fileID: 1847994104}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 668908944}
-  - {fileID: 1232651425}
   - {fileID: 1455363266}
+  - {fileID: 1232651425}

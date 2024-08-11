@@ -8,6 +8,9 @@ using UnityEngine.UI;
 
 public class LevelSelection : MonoBehaviour
 {
+
+    public GameObject settingsMenu;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,11 +23,13 @@ public class LevelSelection : MonoBehaviour
         
     }
 
+    public void OpenSettings(){
+       settingsMenu.SetActive(true);
+    }
+
     public void PlayLevel(int level)
     {
-        Debug.Log(level);
         StartCoroutine(LoadLevelScene(level));
-
     }
 
     IEnumerator LoadLevelScene(int level)
