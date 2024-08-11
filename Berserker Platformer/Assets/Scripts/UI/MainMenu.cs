@@ -14,4 +14,22 @@ public class MainMenu : MonoBehaviour
        settingsMenu.SetActive(true);
     }
 
+    public void PlayGame()
+    {
+        // Coroutine to load LevelSelection Async in background 
+        StartCoroutine(LoadLevelSelection());
+    }
+
+    IEnumerator LoadLevelSelection()
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Level Selection");
+
+        // Wait until the asynchronous scene fully loads
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
+        // Main Menu scene is auto-unloaded
+    }
+
 }
