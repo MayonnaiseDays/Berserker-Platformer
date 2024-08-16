@@ -48,6 +48,8 @@ public class PlayerBehaviorTest : MonoBehaviour
 
     [SerializeField] TrailRenderer tr;
     [SerializeField] private Rigidbody2D rb;
+    private bool isFacingRight = true;
+
 
 
     #endregion
@@ -161,8 +163,8 @@ public class PlayerBehaviorTest : MonoBehaviour
             rb.gravityScale = gravityScale;
         }
         #endregion
-
-
+        //face left/right
+        Flip();
     }
 
     private void FixedUpdate()
@@ -258,7 +260,7 @@ public class PlayerBehaviorTest : MonoBehaviour
         originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
         //30 60 90 triangle if hypothenuse is 1
-        rb.velocity = new Vector2(transform.localScale.x * dashingPower * .865f, transform.localScale.x * dashingPower * .5f);
+        rb.velocity = new Vector2(transform.localScale.x * dashingPower * .865f, transform.localScale.y * dashingPower * .5f);
         tr.emitting = true;
         yield return new WaitForSeconds(dashingTime);
         tr.emitting = false;
@@ -268,5 +270,14 @@ public class PlayerBehaviorTest : MonoBehaviour
         canDash = true;
     }
     #endregion
-
+    private void Flip()
+    {
+        if(isFacingRight && moveInput < 0f || !isFacingRight && moveInput > 0f)
+        {
+            isFacingRight = !isFacingRight;
+            Vector3 localScale = transform.localScale;
+            localScale.x *= -1f;
+            transform.localScale = localScale;
+        }
+    }
 }
