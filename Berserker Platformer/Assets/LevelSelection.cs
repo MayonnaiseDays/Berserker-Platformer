@@ -29,7 +29,8 @@ public class LevelSelection : MonoBehaviour
 
     public void PlayLevel(int level)
     {
-        StartCoroutine(LoadLevelScene(level));
+        //StartCoroutine(LoadLevelScene(level));
+        SceneManager.LoadScene(level);
     }
 
     IEnumerator LoadLevelScene(int level)
