@@ -242,6 +242,37 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8700099913152983625, guid: e41e4c24fc130c044979013442840971, type: 3}
   m_PrefabInstance: {fileID: 7340091}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &431091675
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 431091676}
+  m_Layer: 0
+  m_Name: FMOD Studio API Initializer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &431091676
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 431091675}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 931.4811, y: 531.7614, z: 2.9892888}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &530515491
 GameObject:
   m_ObjectHideFlags: 0
@@ -634,4 +665,5 @@ SceneRoots:
   m_Roots:
   - {fileID: 567498455}
   - {fileID: 530515494}
+  - {fileID: 431091676}
   - {fileID: 1624381696}

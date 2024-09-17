@@ -55,8 +55,20 @@ public class Settings : MonoBehaviour
 
     #region Audio Settings
 
+    public void SetMasterVolume()
+    {
 
+    }
 
+    public void SetMusicVolume()
+    {
+
+    }
+
+    public void SetSFXVolume()
+    {
+
+    }
 
 
     #endregion
