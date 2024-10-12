@@ -24,6 +24,11 @@ public class PlayerBehaviorTest : MonoBehaviour
     float lastJumpTime;
     bool isJumping;
     //bool jumpInputReleased;
+
+    bool isGrabbing;
+    bool isThrowing;
+    GameObject grabbedEnemy;
+    float throwForce = 10f;
     
     
     
@@ -61,12 +66,28 @@ public class PlayerBehaviorTest : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        isGrabbing = false;
+        isThrowing = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        #region Grab Input
+        if (isDashing && Input.GetKeyDown("e"))
+        {
+            isGrabbing = true;
+        }
+
+        //commenting out cause if im grabbing im also dashing and dash already has this
+        /*if (isGrabbing || isThrowing)
+        {
+            //disable the other stuff like inputs during grabs
+            return;
+        }*/
+        #endregion
+
+
         #region DashInput
         //if you press w even before dashing, allow up dash anyways
         
@@ -102,11 +123,7 @@ public class PlayerBehaviorTest : MonoBehaviour
             {
                 StartCoroutine(UpDash());
             }
-
-
-
             return;
-
         }
         #endregion
 
@@ -280,4 +297,48 @@ public class PlayerBehaviorTest : MonoBehaviour
             transform.localScale = localScale;
         }
     }
+
+    #region Grabs
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        //probably need to add isGrabbable on enemies
+        if (isGrabbing && collision.gameObject.CompareTag("Enemy"))
+        {
+            // If enemy is valid for grabbing
+            grabbedEnemy = collision.gameObject;
+            StartThrow();
+        }
+    }
+    void StartThrow()
+    {
+        //it would be really funny to grab multiple enemies and toss them all at once
+        //like katamari
+        isDashing = false;
+        isGrabbing = false;
+        isThrowing = true;
+        
+        //apply force
+        rb.velocity = Vector2.down * throwForce;
+        
+        // Simultaneously apply force to the enemy
+        Rigidbody2D enemyRb = grabbedEnemy.GetComponent<Rigidbody2D>();
+        if (enemyRb != null)
+        {
+            enemyRb.velocity = Vector2.down * throwForce;
+        }
+
+        // End throw after a short delay
+        StartCoroutine(EndThrow());
+    }
+    IEnumerator EndThrow()
+    {
+        yield return new WaitForSeconds(0.5f);  // Adjust the duration of the throw animation
+        isThrowing = false;
+        
+        // Reset enemy and player state
+        grabbedEnemy = null;
+        
+        // Optionally reset position or apply some after-throw effect
+    }
+    #endregion
 }
