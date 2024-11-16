@@ -228,6 +228,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3408671024504001153, guid: 400efcf4ab6cfbe4e89270aa06a01a6b, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5550244147482706908, guid: 400efcf4ab6cfbe4e89270aa06a01a6b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.74
@@ -268,9 +272,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7113317742366230774, guid: 400efcf4ab6cfbe4e89270aa06a01a6b, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9139009569781937438, guid: 400efcf4ab6cfbe4e89270aa06a01a6b, type: 3}
       propertyPath: m_Name
       value: MeleeEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139009569781937438, guid: 400efcf4ab6cfbe4e89270aa06a01a6b, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139009569781937438, guid: 400efcf4ab6cfbe4e89270aa06a01a6b, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

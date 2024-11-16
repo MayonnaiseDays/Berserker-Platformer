@@ -28,7 +28,7 @@ public class PlayerBehaviorTest : MonoBehaviour
     bool isGrabbing;
     bool isThrowing;
     GameObject grabbedEnemy;
-    float throwForce = 10f;
+    float throwForce = 20f;
     
     
     
@@ -324,7 +324,7 @@ public class PlayerBehaviorTest : MonoBehaviour
         Rigidbody2D enemyRb = grabbedEnemy.GetComponent<Rigidbody2D>();
         if (enemyRb != null)
         {
-            enemyRb.velocity = Vector2.down * throwForce;
+            enemyRb.velocity = Vector2.up * throwForce;
         }
 
         // End throw after a short delay
@@ -342,3 +342,11 @@ public class PlayerBehaviorTest : MonoBehaviour
     }
     #endregion
 }
+/*
+#region Projectiles
+void ShootProjectiles()
+{
+
+}
+
+#endregion*/
