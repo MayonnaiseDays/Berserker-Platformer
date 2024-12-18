@@ -7,7 +7,7 @@ public class GenericEnemy : MonoBehaviour
     [Header("Movement")]
     private float speed = 2f;
     private bool isFacingRight = false;
-    //private float flipTimer = 0f;
+    private float flipTimer = 0f;
 
 
     [Header("Attack")]
@@ -56,7 +56,7 @@ public class GenericEnemy : MonoBehaviour
         }
 
         atkTimer += Time.deltaTime;
-        //flipTimer += Time.deltaTime;
+        flipTimer += Time.deltaTime;
 
         //check health and die if needed
     }
@@ -74,7 +74,7 @@ public class GenericEnemy : MonoBehaviour
         // Check if the enemy is about to fall off the edge using a raycast
         if (!IsGroundAhead())
         {
-            //if (flipTimer >= 0f)
+            if (flipTimer >= 0f)
                 Flip();
         }
 
@@ -112,7 +112,7 @@ public class GenericEnemy : MonoBehaviour
     {
         isFacingRight = !isFacingRight;
         transform.localScale = new Vector3(isFacingRight ? 1 : -1, 1, 1);
-        //flipTimer = -1f;
+        flipTimer = -1f;
     }
 
     private void Attack()

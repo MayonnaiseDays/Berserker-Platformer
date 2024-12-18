@@ -30,6 +30,9 @@ public class PlayerBehaviorTest : MonoBehaviour
     GameObject grabbedEnemy;
     float throwForce = 20f;
     
+    public bool isAbsorbing;
+    public float numOfProjectiles;
+    float tempAbsorbTimer;
     
     
     //gotta look into this more
@@ -66,8 +69,13 @@ public class PlayerBehaviorTest : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        isJumping = false;
+        isDashing = false;
         isGrabbing = false;
         isThrowing = false;
+        isAbsorbing = false;
+        numOfProjectiles = 0;
+        tempAbsorbTimer = 0;
     }
 
     // Update is called once per frame
@@ -182,6 +190,25 @@ public class PlayerBehaviorTest : MonoBehaviour
         #endregion
         //face left/right
         Flip();
+
+        #region Absorb
+        tempAbsorbTimer -= Time.deltaTime;
+        if (Input.GetKeyDown("s"))
+        {
+            StartAbsorb();
+            Debug.Log(tempAbsorbTimer);
+            
+        }
+        if (tempAbsorbTimer < 0f)
+        {
+           //Debug.Log(tempAbsorbTimer);
+            EndAbsorb();
+        }
+        /*if (isAbsorbing && Physics2D.OverlapCircle(transform.position, 0f, Projectiles))
+        {
+            numOfProjectiles += 1;
+        }*/
+        #endregion
     }
 
     private void FixedUpdate()
@@ -260,7 +287,7 @@ public class PlayerBehaviorTest : MonoBehaviour
         originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
         //maybe change this to addforce impulse
-        rb.velocity = new Vector2(transform.localScale.x * dashingPower, 0f);
+        rb.velocity = new Vector2(Mathf.Sign(transform.localScale.x) * dashingPower, 0f);
         tr.emitting = true;
         yield return new WaitForSeconds(dashingTime);
         tr.emitting = false;
@@ -277,7 +304,7 @@ public class PlayerBehaviorTest : MonoBehaviour
         originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
         //30 60 90 triangle if hypothenuse is 1
-        rb.velocity = new Vector2(transform.localScale.x * dashingPower * .865f, transform.localScale.y * dashingPower * .5f);
+        rb.velocity = new Vector2(Mathf.Sign(transform.localScale.x) * dashingPower * .865f, Mathf.Sign(transform.localScale.y) * dashingPower * .5f);
         tr.emitting = true;
         yield return new WaitForSeconds(dashingTime);
         tr.emitting = false;
@@ -341,6 +368,18 @@ public class PlayerBehaviorTest : MonoBehaviour
         // Optionally reset position or apply some after-throw effect
     }
     #endregion
+
+    void StartAbsorb()
+    {
+        isAbsorbing = true;
+        tempAbsorbTimer = 20f;
+    }
+
+    void EndAbsorb()
+    {
+        isAbsorbing = false;
+    }
+
 }
 /*
 #region Projectiles
