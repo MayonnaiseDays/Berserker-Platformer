@@ -6,19 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class Settings : MonoBehaviour
 {
-
-    #region General Settings Functionality
-    // handles things like opening/closing settings
-    public void ExitSettings(){
-            gameObject.SetActive(false);
-    }
-
-    #endregion
-
-
-
-
-
     #region Display/Graphics Settings
 
     // Get resolution dropdown selection and apply setting
