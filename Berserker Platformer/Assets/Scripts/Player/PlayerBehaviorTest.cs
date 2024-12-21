@@ -58,7 +58,8 @@ public class PlayerBehaviorTest : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     private bool isFacingRight = true;
 
-
+    float throwDuration;
+    float currThrowDuration;
 
     #endregion
 
@@ -325,7 +326,7 @@ public class PlayerBehaviorTest : MonoBehaviour
         }
     }
 
-    #region Grabs
+    #region Grabs + Throws
     void OnCollisionEnter2D(Collision2D collision)
     {
         //probably need to add isGrabbable on enemies
@@ -333,16 +334,13 @@ public class PlayerBehaviorTest : MonoBehaviour
         {
             // If enemy is valid for grabbing
             grabbedEnemy = collision.gameObject;
-            StartThrow();
+            
+            StartCoroutine(ThrowArc());
         }
     }
-    void StartThrow()
+    /*void StartThrow()
     {
-        //it would be really funny to grab multiple enemies and toss them all at once
-        //like katamari
-        isDashing = false;
-        isGrabbing = false;
-        isThrowing = true;
+
         
         //apply force
         rb.velocity = Vector2.down * throwForce;
@@ -356,16 +354,61 @@ public class PlayerBehaviorTest : MonoBehaviour
 
         // End throw after a short delay
         StartCoroutine(EndThrow());
-    }
-    IEnumerator EndThrow()
+    }*/
+
+    IEnumerator ThrowArc()
     {
-        yield return new WaitForSeconds(0.5f);  // Adjust the duration of the throw animation
+        //it would be really funny to grab multiple enemies and toss them all at once
+        //like katamari
+        isDashing = false;
+        isGrabbing = false;
+        isThrowing = true;
+
+        throwDuration = 2f;
+        currThrowDuration = Time.time;
+
+        //maybe make a game object as the target and be able to move it left or right so the player can control where they land
+        SlerpMovement(gameObject.transform.position, gameObject.transform.position + new Vector3(5 * (isFacingRight ? 1 : -1), 0, 0), throwDuration, currThrowDuration);
+
+        //to kinda have landing effects, maybe not needed
+        //StartCoroutine(EndThrow());
         isThrowing = false;
         
         // Reset enemy and player state
         grabbedEnemy = null;
-        
-        // Optionally reset position or apply some after-throw effect
+
+        yield return null;
+    }
+
+    void SlerpMovement(Vector3 startPos, Vector3 endPos, float journeyTime, float startTime)
+    {
+        //startPos = Vector3
+        //endPos = Vector3
+        float fracComplete;
+
+        // The center of the arc
+        Vector3 center = (startPos + endPos) * 0.5f;
+
+        // move the center a bit downwards to make the arc vertical
+        center -= new Vector3(0, 5, 0);
+
+        // Interpolate over the arc relative to center
+        Vector3 riseRelCenter = startPos - center;
+        Vector3 setRelCenter = endPos - center;
+
+        // The fraction of the animation that has happened so far is
+        // equal to the elapsed time divided by the desired time for
+        // the total journey.
+        fracComplete = (Time.time - startTime) / journeyTime;
+
+        transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, fracComplete);
+        transform.position += center;
+    }
+
+    IEnumerator EndThrow()
+    {
+        yield return new WaitForSeconds(0.5f);
+        //maybe have like a slowed down effect or ground break effect
     }
     #endregion
 

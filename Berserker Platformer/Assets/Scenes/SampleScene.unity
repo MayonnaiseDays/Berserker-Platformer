@@ -321,11 +321,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5321243606560407533, guid: 890e43f94597b43469f5bc27891549c5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.43362787
+      value: -1.76
       objectReference: {fileID: 0}
     - target: {fileID: 5321243606560407533, guid: 890e43f94597b43469f5bc27891549c5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.7712483
+      value: -3.45
       objectReference: {fileID: 0}
     - target: {fileID: 5321243606560407533, guid: 890e43f94597b43469f5bc27891549c5, type: 3}
       propertyPath: m_LocalPosition.z
@@ -433,6 +433,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Artillery
       objectReference: {fileID: 0}
+    - target: {fileID: 393676541941384660, guid: f6769d290d67dde4a86d19bbafa4706c, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 1495000079281768378, guid: f6769d290d67dde4a86d19bbafa4706c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -12.01
@@ -443,7 +447,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1495000079281768378, guid: f6769d290d67dde4a86d19bbafa4706c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 79.4
       objectReference: {fileID: 0}
     - target: {fileID: 1495000079281768378, guid: f6769d290d67dde4a86d19bbafa4706c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -481,6 +485,18 @@ PrefabInstance:
       propertyPath: firePoint
       value: 
       objectReference: {fileID: 1278993050}
+    - target: {fileID: 4803555565155124649, guid: f6769d290d67dde4a86d19bbafa4706c, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6331415582654509212, guid: f6769d290d67dde4a86d19bbafa4706c, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8434967808851108397, guid: f6769d290d67dde4a86d19bbafa4706c, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

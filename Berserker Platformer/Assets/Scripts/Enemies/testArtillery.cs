@@ -39,9 +39,10 @@ public class testArtillery : MonoBehaviour
         if (payloadPrefabs.Length < 0) 
             //NoMoreAmmo();
             return;
-        GameObject backPayload = Instantiate(payloadPrefabs[0], firePoint.position, Quaternion.identity, gameObject.transform);
-        Rigidbody2D rb = backPayload.GetComponent<Rigidbody2D>();
-        rb.AddForce(Vector2.up * fireForce, ForceMode2D.Impulse); // Fire up
+        GameObject payload = Instantiate(payloadPrefabs[0], firePoint.position, Quaternion.identity);
+        payload.transform.GetComponent<PayloadGeneric>().cannonPos = firePoint;
+        //Rigidbody2D rb = payload.GetComponent<Rigidbody2D>();
+        //rb.AddForce(Vector2.up * fireForce, ForceMode2D.Impulse); // Fire up
 
     }
 
@@ -51,7 +52,7 @@ public class testArtillery : MonoBehaviour
         //maybe detroy self after
     }
 
-    public void payloadOffsceen()
+    /*public void payloadOffsceen()
     {
         //wait some time then respawn it in foreground
         StartCoroutine(RespawnPayloadAfterDelay(2f));
@@ -70,5 +71,5 @@ public class testArtillery : MonoBehaviour
         {
             rb.AddForce(Vector2.up * fireForce, ForceMode2D.Impulse); // Fire up the payload
         }
-    }
+    }*/
 }
