@@ -4,23 +4,41 @@ using UnityEngine;
 
 public class MenuManager : MonoBehaviour
 {
+    public GameManager gameManager;
+    
+    // UI Screens
     public GameObject mainMenu;
     public GameObject levelSelectMenu;
     public GameObject settingsMenu;
-
     public GameObject currentMenu;
 
 
     void Start()
     {
-        if(!mainMenu.active)
+        gameManager = GameManager.Instance;
+
+        if(!mainMenu.activeSelf)
             OpenMainMenu();
-        if(levelSelectMenu.active)
+        if(levelSelectMenu.activeSelf)
             CloseLevelSelection();
-        if(settingsMenu.active)
+        if(settingsMenu.activeSelf)
             CloseSettings();
+    }
 
-
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            // Use ternary operator to toggle settings
+            if (gameManager.IsPaused)
+            {
+                CloseSettings();
+            }
+            else
+            {
+                OpenSettings();
+            }
+        }
     }
 
     # region Open/Close Menus
@@ -41,20 +59,15 @@ public class MenuManager : MonoBehaviour
 
         public void OpenSettings(){
             settingsMenu.SetActive(true);
+            // Toggle the isPaused state
+            gameManager.SetPause(!gameManager.IsPaused);
         }
         public void CloseSettings(){
             settingsMenu.SetActive(false);
+            // Toggle the isPaused state
+            gameManager.SetPause(!gameManager.IsPaused);
         }
     # endregion
 
-    public void PlayGame()
-    {
-        // Coroutine to load LevelSelection Async in background 
-        //StartCoroutine(LoadLevelSelection());
-    }
 
-    private void OpenLevelSelectionMenu()
-    {
-        
-    }
 }
