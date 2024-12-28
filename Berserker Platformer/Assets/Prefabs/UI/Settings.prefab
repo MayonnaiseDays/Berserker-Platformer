@@ -298,11 +298,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3003054371101806905}
         m_TargetAssemblyTypeName: Settings, Assembly-CSharp
-        m_MethodName: VolumeChanged
-        m_Mode: 1
+        m_MethodName: SliderSetMasterVolume
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 8310256585640935213}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Slider, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -3902,11 +3902,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3003054371101806905}
         m_TargetAssemblyTypeName: Settings, Assembly-CSharp
-        m_MethodName: VolumeChanged
-        m_Mode: 1
+        m_MethodName: SliderSetSFXVolume
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 3045590088200708887}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Slider, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -6109,11 +6109,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3003054371101806905}
         m_TargetAssemblyTypeName: Settings, Assembly-CSharp
-        m_MethodName: VolumeChanged
-        m_Mode: 1
+        m_MethodName: SliderSetMusicVolume
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 6040231707729860589}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Slider, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

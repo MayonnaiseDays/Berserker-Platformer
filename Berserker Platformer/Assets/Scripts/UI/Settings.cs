@@ -78,16 +78,6 @@ public class Settings : MonoBehaviour
         ApplyButtonImage.color = currentColor;
     }
 
-    public void VolumeChanged()
-    {
-        // Master Volume
-        SaveManager.Instance.SetMasterVolume(Master_Volume.value);
-        // Music Volume
-        SaveManager.Instance.SetMusicVolume(Music_Volume.value);
-        // SFX Volume
-        SaveManager.Instance.SetSFXVolume(SFX_Volume.value);
-    }
-
     // Call to grab values from playerprefs and populate settings menu
     public void PopulateUIElements()
     {
@@ -116,6 +106,19 @@ public class Settings : MonoBehaviour
         // Read SFX Volume (0.0 to 1.0)
         float sfxVolume = PlayerPrefs.GetFloat("SFX_VOLUME");
         SFX_Volume.value = sfxVolume;
+    }
+
+    public void SliderSetMusicVolume(Slider slider)
+    {
+        SaveManager.Instance.SetMusicVolume(slider.value);
+    }
+    public void SliderSetMasterVolume(Slider slider)
+    {
+        SaveManager.Instance.SetMasterVolume(slider.value);
+    }
+    public void SliderSetSFXVolume(Slider slider)
+    {
+        SaveManager.Instance.SetSFXVolume(slider.value);
     }
 
     // Returns true if the given resolution is approximately 16:9, including fractional (1280x720) or higher/lower multiples

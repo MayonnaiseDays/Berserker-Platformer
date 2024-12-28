@@ -1,5 +1,8 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.IO;
+using FMODUnity;
+using FMOD.Studio;
 
 // Handles actually saving and using default values if no save values are found in playerprefs/save file
 public class SaveManager : MonoBehaviour
@@ -26,6 +29,11 @@ public class SaveManager : MonoBehaviour
     private const string KEY_MUSIC_VOLUME  = "MUSIC_VOLUME";
 
 
+     // Store references to the FMOD buses if you don't want to call GetBus every time
+    private Bus masterBus;
+    private Bus sfxBus;
+    private Bus musicBus;
+
     // Singleton reference
     public static SaveManager Instance { get; private set; }
     private void Awake()
@@ -45,6 +53,10 @@ public class SaveManager : MonoBehaviour
             Directory.CreateDirectory(SAVE_FOLDER);
             Debug.Log($"Created directory for saves at: {SAVE_FOLDER}");
         }
+
+        masterBus = RuntimeManager.GetBus("bus:/");
+        sfxBus    = RuntimeManager.GetBus("bus:/SFX");
+        musicBus  = RuntimeManager.GetBus("bus:/Music");
     }
 
     private void Start()
@@ -147,8 +159,8 @@ public class SaveManager : MonoBehaviour
         // Save any newly assigned defaults
         PlayerPrefs.Save();
 
-        Debug.Log("Res width = " + PlayerPrefs.GetInt(KEY_RES_WIDTH).ToString());
-        Debug.Log("Res height = " + PlayerPrefs.GetInt(KEY_RES_HEIGHT).ToString());
+        //Debug.Log("Res width = " + PlayerPrefs.GetInt(KEY_RES_WIDTH).ToString());
+        //Debug.Log("Res height = " + PlayerPrefs.GetInt(KEY_RES_HEIGHT).ToString());
 
         // 2) Now retrieve the (potentially just-set) values from PlayerPrefs
         int width             = PlayerPrefs.GetInt(KEY_RES_WIDTH);
@@ -175,7 +187,9 @@ public class SaveManager : MonoBehaviour
         QualitySettings.vSyncCount = vsync;
 
         // Master volume (tied to AudioListener volume as an example)
-        AudioListener.volume = masterVolume;
+        SetMasterVolume(masterVolume);
+        SetMusicVolume(sfxVolume);
+        SetSFXVolume(musicVolume);
 
         // (Optional) You'd likely route sfxVolume and musicVolume to specific AudioMixers.
 
@@ -200,7 +214,7 @@ public class SaveManager : MonoBehaviour
 
         Screen.SetResolution(width, height, (FullScreenMode)mode, fps);
         Application.targetFrameRate = fps;
-        Debug.Log("SetResFSFPS DONE");
+        //Debug.Log("SetResFSFPS DONE");
     }
 
     public void SetVSync(int vsyncCount)
@@ -209,35 +223,40 @@ public class SaveManager : MonoBehaviour
         PlayerPrefs.Save();
 
         QualitySettings.vSyncCount = vsyncCount;
-        Debug.Log("SetVSYNC DONE");
+        //Debug.Log("SetVSYNC DONE");
     }
 
-    // Sets and saves the MASTER volume. (We tie AudioListener.volume to MASTER_VOLUME.)
+    
     public void SetMasterVolume(float volume)
     {
         PlayerPrefs.SetFloat(KEY_MASTER_VOLUME, volume);
         PlayerPrefs.Save();
 
-        AudioListener.volume = volume; // Just as an example
+        // Update FMOD
+        masterBus.setVolume(volume);
+
         Debug.Log($"Master volume set to {volume}");
     }
-
-    // Sets and saves the SFX volume (used by your SFX mixer channel or manager).
+    
     public void SetSFXVolume(float volume)
     {
         PlayerPrefs.SetFloat(KEY_SFX_VOLUME, volume);
         PlayerPrefs.Save();
-        // In practice, route this to your SFX mixer:
-        // e.g. sfxMixer.SetFloat("SFXVolume", Mathf.Log10(volume) * 20);
+
+        // Update FMOD
+        sfxBus.setVolume(volume);
+
         Debug.Log($"SFX volume set to {volume}");
     }
-
-    // Sets and saves the MUSIC volume (used by your Music mixer channel or manager).
+    
     public void SetMusicVolume(float volume)
     {
         PlayerPrefs.SetFloat(KEY_MUSIC_VOLUME, volume);
         PlayerPrefs.Save();
-        // Similarly, apply to a separate music mixer
+
+        // Update FMOD
+        musicBus.setVolume(volume);
+
         Debug.Log($"Music volume set to {volume}");
     }
 
