@@ -110,17 +110,22 @@ public class Settings : MonoBehaviour
         List<TMP_Dropdown.OptionData> WindowModeOptions = WindowMode.options;
 
         // Find the index of the option that matches the saved "FULLSCREEN_MODE" value
-        string savedMode = PlayerPrefs.GetString("FULLSCREEN_MODE", "FullscreenWindow"); // Default to "FullscreenWindow"
-        int currentIndex = WindowModeOptions.FindIndex(option => option.text == savedMode);
-
-        // If a match is found, set the dropdown's value to the corresponding index
-        if (currentIndex != -1)
+        int savedMode = PlayerPrefs.GetInt("FULLSCREEN_MODE"); // Default is "Borderless"
+        
+        switch(savedMode)
         {
-            WindowMode.value = currentIndex;
-            WindowMode.RefreshShownValue(); // Update the visible text
+            case 0:
+                WindowMode.value = 0;
+                break;
+            case 1:
+                WindowMode.value = 1;
+                break;
+            case 3:
+                WindowMode.value = 2;
+                break;
         }
+        WindowMode.RefreshShownValue(); // Update the visible text
     }
-
 
 
 }

@@ -16,7 +16,7 @@ public class SaveManager : MonoBehaviour
     // Resolution keys
     private const string KEY_RES_WIDTH         = "RES_WIDTH";
     private const string KEY_RES_HEIGHT        = "RES_HEIGHT";
-    private const string KEY_FULLSCREEN_MODE   = "FULLSCREEN_MODE";  // 0=Windowed,1=FullScreenWindow,2=ExclusiveFullScreen,etc.
+    private const string KEY_FULLSCREEN_MODE   = "FULLSCREEN_MODE";  // Fullscreen, Borderless, Windowed
     private const string KEY_FRAME_RATE        = "FRAME_RATE";       // e.g. 60,120
     private const string KEY_VSYNC             = "VSYNC";            // 0=Off,1=On
 
@@ -153,6 +153,7 @@ public class SaveManager : MonoBehaviour
         // 2) Now retrieve the (potentially just-set) values from PlayerPrefs
         int width             = PlayerPrefs.GetInt(KEY_RES_WIDTH);
         int height            = PlayerPrefs.GetInt(KEY_RES_HEIGHT);
+        
         int fullscreenModeInt = PlayerPrefs.GetInt(KEY_FULLSCREEN_MODE);
         FullScreenMode fsMode = (FullScreenMode)fullscreenModeInt;
         
@@ -189,14 +190,14 @@ public class SaveManager : MonoBehaviour
     // -------------- OPTIONAL HELPER METHODS --------------
     // Call these whenever a player changes the setting in your UI or Options menu.
 
-    public void SetResolution(int width, int height, FullScreenMode mode)
+    public void SetResolution(int width, int height, int mode)
     {
         PlayerPrefs.SetInt(KEY_RES_WIDTH, width);
         PlayerPrefs.SetInt(KEY_RES_HEIGHT, height);
-        PlayerPrefs.SetInt(KEY_FULLSCREEN_MODE, (int)mode);
+        PlayerPrefs.SetInt(KEY_FULLSCREEN_MODE, mode);
         PlayerPrefs.Save();
 
-        Screen.SetResolution(width, height, mode);
+        Screen.SetResolution(width, height, (FullScreenMode)mode);
     }
 
     public void SetFrameRate(int fps)
