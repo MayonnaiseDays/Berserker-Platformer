@@ -112,7 +112,7 @@ public class SaveManager : MonoBehaviour
             defaultHeight = DEFAULT_RES_HEIGHT;
         }
         
-        int defaultFps        = 60;
+        int defaultFps        = 120;
         int defaultVsync      = 1; // 1 = On
         float defaultMaster   = 0.5f;
         float defaultSfx      = 0.5f;
@@ -190,22 +190,17 @@ public class SaveManager : MonoBehaviour
     // -------------- OPTIONAL HELPER METHODS --------------
     // Call these whenever a player changes the setting in your UI or Options menu.
 
-    public void SetResolution(int width, int height, int mode)
+    public void SetResolution_FullScreenMode_FPS(int width, int height, int mode, int fps)
     {
         PlayerPrefs.SetInt(KEY_RES_WIDTH, width);
         PlayerPrefs.SetInt(KEY_RES_HEIGHT, height);
         PlayerPrefs.SetInt(KEY_FULLSCREEN_MODE, mode);
-        PlayerPrefs.Save();
-
-        Screen.SetResolution(width, height, (FullScreenMode)mode);
-    }
-
-    public void SetFrameRate(int fps)
-    {
         PlayerPrefs.SetInt(KEY_FRAME_RATE, fps);
         PlayerPrefs.Save();
 
+        Screen.SetResolution(width, height, (FullScreenMode)mode, fps);
         Application.targetFrameRate = fps;
+        Debug.Log("SetResFSFPS DONE");
     }
 
     public void SetVSync(int vsyncCount)
@@ -214,6 +209,7 @@ public class SaveManager : MonoBehaviour
         PlayerPrefs.Save();
 
         QualitySettings.vSyncCount = vsyncCount;
+        Debug.Log("SetVSYNC DONE");
     }
 
     // Sets and saves the MASTER volume. (We tie AudioListener.volume to MASTER_VOLUME.)
@@ -223,6 +219,7 @@ public class SaveManager : MonoBehaviour
         PlayerPrefs.Save();
 
         AudioListener.volume = volume; // Just as an example
+        Debug.Log($"Master volume set to {volume}");
     }
 
     // Sets and saves the SFX volume (used by your SFX mixer channel or manager).

@@ -58,14 +58,14 @@ public class MenuManager : MonoBehaviour
         }
 
         public void OpenSettings(){
-            settingsMenu.SetActive(true);
             // Toggle the isPaused state
             gameManager.SetPause(!gameManager.IsPaused);
+            settingsMenu.SetActive(true);
         }
         public void CloseSettings(){
-            settingsMenu.SetActive(false);
             // Toggle the isPaused state
             gameManager.SetPause(!gameManager.IsPaused);
+            settingsMenu.SetActive(false);
         }
     # endregion
 
