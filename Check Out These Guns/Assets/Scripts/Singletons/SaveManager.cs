@@ -124,7 +124,7 @@ public class SaveManager : MonoBehaviour
             defaultHeight = DEFAULT_RES_HEIGHT;
         }
         
-        int defaultFps        = 120;
+        int defaultFps        = 60;
         int defaultVsync      = 1; // 1 = On
         float defaultMaster   = 0.5f;
         float defaultSfx      = 0.5f;
