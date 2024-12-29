@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1495000079281768378}
   - component: {fileID: 682186864479556873}
   - component: {fileID: 2465701952914280200}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Artillery
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,8 +104,8 @@ MonoBehaviour:
   - {fileID: 6348496587145587383, guid: 0f64b925b7759594b8590974e8df1446, type: 3}
   - {fileID: 6348496587145587383, guid: 0f64b925b7759594b8590974e8df1446, type: 3}
   - {fileID: 6348496587145587383, guid: 0f64b925b7759594b8590974e8df1446, type: 3}
-  firePoint: {fileID: 0}
-  fireForce: 10
+  firePoint: {fileID: 4988627560477098149}
+  fireForce: 0
   initShootCD: 5
   shootCooldown: 10
 --- !u!1 &4803555565155124649
@@ -118,7 +118,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2873222774331448136}
   - component: {fileID: 7490177859170661646}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -202,7 +202,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4988627560477098149}
   - component: {fileID: 6932937355093351168}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Isometric Diamond
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -286,7 +286,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6781435078829990821}
   - component: {fileID: 4665333160081782906}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Isometric Diamond (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
