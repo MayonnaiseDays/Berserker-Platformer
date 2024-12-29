@@ -444,7 +444,6 @@ MonoBehaviour:
   - fd7c55dab0fce234b8c25f6ffca523c1
   - 46fbfdf3fc43db0458918377fd40293e
   - b7716510a1f36934c87976f3a81dbf3d
-  - 52eb9df5db46521439908db3a29a1bbb
   codecChannels:
     Value: []
     HasValue: 0
@@ -534,10 +533,10 @@ MonoBehaviour:
   m_Name: FMODStudioSettings
   m_EditorClassIdentifier: 
   switchSettingsMigration: 1
-  HasSourceProject: 0
-  HasPlatforms: 0
-  sourceProjectPath: 
-  sourceBankPath: Desktop
+  HasSourceProject: 1
+  HasPlatforms: 1
+  sourceProjectPath: COTG FMOD/COTG FMOD.fspro
+  sourceBankPath: COTG FMOD/Build
   sourceBankPathUnformatted: 
   BankRefreshCooldown: 5
   ShowBankRefreshWindow: 1
@@ -560,7 +559,8 @@ MonoBehaviour:
   Plugins: []
   MasterBanks:
   - Master
-  Banks: []
+  Banks:
+  - BGM
   BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0
@@ -572,7 +572,7 @@ MonoBehaviour:
   EnableErrorCallback: 0
   SharedLibraryUpdateStage: 0
   SharedLibraryTimeSinceStart: 0
-  CurrentVersion: 131619
+  CurrentVersion: 131622
   HideSetupWizard: 1
   LastEventReferenceScanVersion: 131619
   Platforms:
@@ -587,7 +587,6 @@ MonoBehaviour:
   - {fileID: 2463338026788830142}
   - {fileID: 3281757829826099850}
   - {fileID: 7279291535852919005}
-  - {fileID: 8313656515615000766}
   MigratedPlatforms: 080000001200000006000000050000000b000000000000000a000000090000000c000000150000000200000001000000
 --- !u!114 &1164728197973556395
 MonoBehaviour:
@@ -942,9 +941,7 @@ MonoBehaviour:
     StaticPlugins:
       Value: []
       HasValue: 0
-    CallbackHandler:
-      Value: {fileID: 0}
-      HasValue: 0
+    CallbackHandler: {Value: {fileID: 0}, HasValue: 0}
   OutputTypeName: 
   threadAffinities:
     Value: []
