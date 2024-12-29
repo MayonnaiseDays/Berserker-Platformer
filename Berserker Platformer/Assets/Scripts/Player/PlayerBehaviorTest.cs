@@ -22,15 +22,15 @@ public class PlayerBehaviorTest : MonoBehaviour
     float fallGravityMultiplier = 1.5f;
     float lastGroundedTime;
     float lastJumpTime;
-    bool isJumping;
+   
     //bool jumpInputReleased;
 
-    bool isGrabbing;
-    bool isThrowing;
+    //bool isGrabbing;
+    //bool isThrowing;
     GameObject grabbedEnemy;
     float throwForce = 20f;
     
-    public bool isAbsorbing;
+    //public bool isAbsorbing;
     public float numOfProjectiles;
     float tempAbsorbTimer;
     
@@ -42,8 +42,8 @@ public class PlayerBehaviorTest : MonoBehaviour
     [SerializeField] private LayerMask groundlayer;
 
     bool canDash = true;
-    bool isDashing;
-    bool isUpDashing;
+    //bool isDashing;
+    //bool isUpDashing;
     float originalGravity;
     float dashingPower = 24f;
     float dashingTime = .3f;
@@ -60,56 +60,97 @@ public class PlayerBehaviorTest : MonoBehaviour
 
     float throwDuration;
     float currThrowDuration;
+    float size = 1f;
 
+    //this could maybe be the exact gameobject absorb rather than a generic projectile
+    public GameObject projectilePrefab;
+    float launchForce = 30f;
+
+    public playerState currState;
     #endregion
 
-
-    
+    bool isJumping;
+    bool isIdle;
+    bool isUpDashing;
+    bool IsDashGrab;
+    bool isCargoEnemy;
+    public enum playerState
+    {
+        isMoving, //maybe split to isWalking and isRunning
+        //took out isjumping because dash would reset jump which made dash jump dash jump possible
+        //isJumping,
+        isAttacking,
+        isDashing,
+        //isUpDashing,
+        isDashGrabbing,
+        isGrabbing,
+        isThrowing,
+        isAbsorbing,
+        isReleasing
+    }
     
 
     // Start is called before the first frame update
     void Start()
     {
-        isJumping = false;
-        isDashing = false;
-        isGrabbing = false;
-        isThrowing = false;
-        isAbsorbing = false;
+        currState = playerState.isMoving;
         numOfProjectiles = 0;
         tempAbsorbTimer = 0;
+        //IsDashGrab = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("Current State: " + currState);
+
+        //currently only used for release but maytbe could have something like strike force heroes 2
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition.z = 0f;
+        Vector3 mouseDirection = (mousePosition - transform.position).normalized;
+        mousePosition.z = 0f;
+        //first for normalize calcs, second cause it still had nonzero z's
+        //Debug.Log($"Mouse Direction: {mouseDirection}");
+
+
         #region Grab Input
-        if (isDashing && Input.GetKeyDown("e"))
+        if (Input.GetKeyDown("e"))
         {
-            isGrabbing = true;
+            Debug.Log("input detect e");
+            if (currState == playerState.isDashing)
+            {
+                Debug.Log("dash to dasg gerab");
+                currState = playerState.isDashGrabbing;
+            }
+            else
+            {
+                Debug.Log("nondash to grab");
+                currState = playerState.isGrabbing;
+            }
+            Debug.Log("Im grabbing");
+            //include grab whiffs
         }
 
-        //commenting out cause if im grabbing im also dashing and dash already has this
-        /*if (isGrabbing || isThrowing)
-        {
-            //disable the other stuff like inputs during grabs
-            return;
-        }*/
         #endregion
+
+        if (Input.GetMouseButtonDown(1) && (numOfProjectiles > 0 || isCargoEnemy))
+        {
+            currState = playerState.isReleasing;
+
+            ShootProjectiles(mouseDirection);
+            currState = playerState.isMoving;
+
+        }
 
 
         #region DashInput
+
+
         //if you press w even before dashing, allow up dash anyways
-        
-        
         if (Input.GetKey("w"))
         {
             lastUpDashTime = upDashBufferTime;
         }
-        /*if (lastUpDashTime > 0f && canDash)
-        {
-            //add code
-            StartCoroutine(UpDash());
-        }*/
         if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
         {
             if (lastUpDashTime > 0f)
@@ -118,16 +159,15 @@ public class PlayerBehaviorTest : MonoBehaviour
             }
             else
             {
+                isUpDashing = false;
                 StartCoroutine(Dash());
                 stillCanUpDashTime = upDashCoyoteTime;
             }
         }
-        if (isDashing || isUpDashing)
+        if (currState == playerState.isDashing)
         {
             lastUpDashTime -= Time.deltaTime;
             stillCanUpDashTime -= Time.deltaTime;
-            //basically dont take most of the inputs
-            //maybe have a coyote time for dashing to decode if its an up dash
             if (stillCanUpDashTime > 0f && Input.GetKeyDown("w"))
             {
                 StartCoroutine(UpDash());
@@ -215,7 +255,7 @@ public class PlayerBehaviorTest : MonoBehaviour
     private void FixedUpdate()
     {
         //Attention! may need to attach
-        if(isDashing || isUpDashing)
+        if(!(currState == playerState.isMoving))
             return;
         //if theres anything happening thats not supposed to during dashing
         #region Actual Movement
@@ -262,7 +302,7 @@ public class PlayerBehaviorTest : MonoBehaviour
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse); 
         lastGroundedTime = 0;
         lastJumpTime = 0;
-        isJumping = true;
+        isJumping = false;
         //jumpInputReleased = false;
     
     }
@@ -281,10 +321,11 @@ public class PlayerBehaviorTest : MonoBehaviour
     }
     
     #region Dash
+    //lets try changing this to a 
     public IEnumerator Dash()
     {
         canDash = false;
-        isDashing = true;
+        currState = playerState.isDashing;
         originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
         //maybe change this to addforce impulse
@@ -293,14 +334,16 @@ public class PlayerBehaviorTest : MonoBehaviour
         yield return new WaitForSeconds(dashingTime);
         tr.emitting = false;
         rb.gravityScale = originalGravity;
-        isDashing = false;
+        currState = playerState.isMoving;
         yield return new WaitForSeconds(dashingCooldown);
         canDash = true;
+        Debug.Log("reg dash end");
     } 
 
     public IEnumerator UpDash()
     {
         canDash = false;
+        currState = playerState.isDashing;
         isUpDashing = true;
         originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
@@ -310,9 +353,10 @@ public class PlayerBehaviorTest : MonoBehaviour
         yield return new WaitForSeconds(dashingTime);
         tr.emitting = false;
         rb.gravityScale = originalGravity;
-        isUpDashing = false;
+        currState = playerState.isMoving;
         yield return new WaitForSeconds(dashingCooldown);
         canDash = true;
+        Debug.Log("up dash end");
     }
     #endregion
     private void Flip()
@@ -330,39 +374,41 @@ public class PlayerBehaviorTest : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         //probably need to add isGrabbable on enemies
-        if (isGrabbing && collision.gameObject.CompareTag("Enemy"))
+        Debug.Log("playerstate: " + currState.ToString());
+        if (currState == playerState.isGrabbing && collision.gameObject.CompareTag("Enemy"))
         {
+            //if iscargoenemy = false;
+            Debug.Log(" about to grab");
             // If enemy is valid for grabbing
             grabbedEnemy = collision.gameObject;
+            //grabbedEnemy.GetComponent<BoxCollider2D>().enabled = false;
             
-            StartCoroutine(ThrowArc());
+            TESTCargoGrabEnemy(grabbedEnemy);
         }
     }
-    /*void StartThrow()
-    {
 
-        
-        //apply force
-        rb.velocity = Vector2.down * throwForce;
-        
-        // Simultaneously apply force to the enemy
+    void TESTCargoGrabEnemy(GameObject grabbedEnemy)
+    {
         Rigidbody2D enemyRb = grabbedEnemy.GetComponent<Rigidbody2D>();
         if (enemyRb != null)
         {
-            enemyRb.velocity = Vector2.up * throwForce;
+            enemyRb.velocity = Vector2.zero; // Stop the enemy's motion
+            enemyRb.isKinematic = true; // Disable physics temporarily
         }
 
-        // End throw after a short delay
-        StartCoroutine(EndThrow());
-    }*/
+        // Attach the enemy to the player (parent it)
+        grabbedEnemy.transform.SetParent(transform);
+        grabbedEnemy.transform.localPosition = new Vector3(0, 1, 0);
 
-    IEnumerator ThrowArc()
+        isCargoEnemy = true;
+    }
+
+    void ThrowArc()
     {
+        Debug.Log("throwing start");
         //it would be really funny to grab multiple enemies and toss them all at once
         //like katamari
-        isDashing = false;
-        isGrabbing = false;
-        isThrowing = true;
+        currState = playerState.isThrowing;
 
         throwDuration = 2f;
         currThrowDuration = Time.time;
@@ -372,12 +418,11 @@ public class PlayerBehaviorTest : MonoBehaviour
 
         //to kinda have landing effects, maybe not needed
         //StartCoroutine(EndThrow());
-        isThrowing = false;
+        currState = playerState.isMoving;
         
         // Reset enemy and player state
         grabbedEnemy = null;
 
-        yield return null;
     }
 
     void SlerpMovement(Vector3 startPos, Vector3 endPos, float journeyTime, float startTime)
@@ -385,6 +430,7 @@ public class PlayerBehaviorTest : MonoBehaviour
         //startPos = Vector3
         //endPos = Vector3
         float fracComplete;
+        Debug.Log("start + end: " + startPos + " " + endPos);
 
         // The center of the arc
         Vector3 center = (startPos + endPos) * 0.5f;
@@ -414,21 +460,52 @@ public class PlayerBehaviorTest : MonoBehaviour
 
     void StartAbsorb()
     {
-        isAbsorbing = true;
-        tempAbsorbTimer = 20f;
+        currState = playerState.isAbsorbing;
+        tempAbsorbTimer = 1f;
     }
 
     void EndAbsorb()
     {
-        isAbsorbing = false;
+        currState = playerState.isMoving;
     }
 
-}
-/*
-#region Projectiles
-void ShootProjectiles()
-{
+    #region Projectiles
+    void ShootProjectiles(Vector3 mouseDirection)
+    {
+        numOfProjectiles -= 1;
+        
+        GameObject projectile = Instantiate(projectilePrefab, mouseDirection + transform.position, Quaternion.identity);
+        Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
+        rb.AddForce(mouseDirection * launchForce, ForceMode2D.Impulse);
+        Rigidbody2D prb = GetComponent<Rigidbody2D>();
+        prb.AddForce(mouseDirection * launchForce * -1, ForceMode2D.Impulse);
+        Debug.Log("projectile direction" + mouseDirection * launchForce);
+        Debug.Log("velocity  + magnitude: " + rb.velocity + "  " + rb.velocity.magnitude);
+        Debug.Log("player velo:" + prb.velocity);
+        transform.localScale -= new Vector3(Mathf.Sign(transform.localScale.x) * size / 5f, size / 5f, 0);
+    }
+
+    void ShootEnemy(Vector3 mouseDirection)
+    {
+        if (grabbedEnemy == null) 
+            return;
+
+        // Detach the enemy from the player
+        grabbedEnemy.transform.SetParent(null);
+
+        // Enable physics on the enemy
+        Rigidbody2D enemyRb = grabbedEnemy.GetComponent<Rigidbody2D>();
+        if (enemyRb != null)
+        {
+            enemyRb.isKinematic = false;
+            enemyRb.AddForce(mouseDirection * launchForce, ForceMode2D.Impulse); // Apply force
+        }
+
+        // Clear the grabbed enemy reference
+        grabbedEnemy = null;
+    }
+
+    #endregion
 
 }
 
-#endregion*/

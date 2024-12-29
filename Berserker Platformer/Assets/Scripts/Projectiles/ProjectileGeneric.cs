@@ -60,10 +60,11 @@ public class ProjectileGeneric : MonoBehaviour
     void HandlePlayerHit(GameObject player)
     {
         Debug.Log("touchy");
-        if (player.GetComponent<PlayerBehaviorTest>().isAbsorbing)
+        PlayerBehaviorTest playerScript = player.GetComponent<PlayerBehaviorTest>();
+        if (playerScript.currState == PlayerBehaviorTest.playerState.isAbsorbing)
         {
             Debug.Log("absorbattempt");
-            player.GetComponent<PlayerBehaviorTest>().numOfProjectiles += 1;
+            playerScript.numOfProjectiles += 1;
             player.transform.localScale += new Vector3(Mathf.Sign(player.transform.localScale.x) * size / 5f, size / 5f, 0);
             Destroy(gameObject);
         }

@@ -175,7 +175,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3954304db3327274fa326a2e2aa0ecef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isAbsorbing: 0
   numOfProjectiles: 0
   groundSensor: {fileID: 5626806808233893808}
   groundlayer:
@@ -183,6 +182,8 @@ MonoBehaviour:
     m_Bits: 64
   tr: {fileID: 5011239880259773925}
   rb: {fileID: 5236116429169185865}
+  projectilePrefab: {fileID: 908242396680477384, guid: 362fbfc7e948e034cbbcd87bc845c013, type: 3}
+  currState: 0
 --- !u!114 &3877436860649949119
 MonoBehaviour:
   m_ObjectHideFlags: 0

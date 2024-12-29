@@ -179,7 +179,6 @@ GameObject:
   - component: {fileID: 6735788654684813780}
   - component: {fileID: 8622537524801742433}
   - component: {fileID: -5427325842315683928}
-  - component: {fileID: 282374421167868870}
   - component: {fileID: 1905662741501289657}
   - component: {fileID: 8208958974744438171}
   m_Layer: 0
@@ -271,7 +270,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   payloadType: 0
-  groundSensor: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -281,23 +279,11 @@ MonoBehaviour:
   explosionRadius: 2
   Damage: 10
   activated: 0
---- !u!114 &282374421167868870
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6348496587145587383}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75e12b6e6b53a7b489a470b24df08a2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  launchForce: 10
-  launchDirection: {x: 1, y: 0}
-  mass: 1
   size: 1
-  belongsToPlayer: 0
+  journeyTime: 2
+  cannonPos: {fileID: 0}
+  landingPos: {x: 0, y: 0, z: 0}
+  fracComplete: 0
 --- !u!50 &1905662741501289657
 Rigidbody2D:
   serializedVersion: 4

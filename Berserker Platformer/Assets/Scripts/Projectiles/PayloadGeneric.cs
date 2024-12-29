@@ -14,6 +14,7 @@ public class PayloadGeneric : MonoBehaviour
     public float explosionRadius = 2f;
     public int Damage = 10;
     public bool activated;
+    public float size = 1f;
 
     // Time to move from sunrise to sunset position, in seconds.
     public float journeyTime = 2.0f;
@@ -50,6 +51,37 @@ public class PayloadGeneric : MonoBehaviour
         } 
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Handle collision with the player or enemies
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("about to touchy");
+            // If projectile is shot by enemy and hits the player
+            HandlePlayerHit(collision.gameObject);
+        }
+    }
+
+    void HandlePlayerHit(GameObject player)
+    {
+        Debug.Log("touchy");
+        PlayerBehaviorTest playerScript = player.GetComponent<PlayerBehaviorTest>();
+        if (playerScript.currState == PlayerBehaviorTest.playerState.isAbsorbing)
+        {
+            Debug.Log("absorbattempt");
+            playerScript.numOfProjectiles += 1;
+            player.transform.localScale += new Vector3(Mathf.Sign(player.transform.localScale.x) * size / 5f, size / 5f, 0);
+            Destroy(gameObject);
+        }
+        // Here, you can apply damage or effects to the player
+        Debug.Log("Player hit by enemy projectile!");
+
+        // Optionally, destroy the projectile when it hits the player
+        //Destroy(gameObject);
+
+        // Apply damage or effects to the player
+        // player.GetComponent<PlayerHealth>().TakeDamage(10);
+    }
     /*private void OnCollisionEnter2D(Collision2D collision)
     {
         //maybe remove the if grounded check from above and instead have a specific ground near the player to check for collisions with

@@ -34,6 +34,8 @@ public class GenericEnemy : MonoBehaviour
     public float groundCheckDistance = 0.5f;
     public LayerMask groundLayer;
 
+    public bool isGrabbed;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,12 +44,15 @@ public class GenericEnemy : MonoBehaviour
         anim = GetComponent<Animator>();
         currentHealth = maxHealth;
         float gravityScale = 3f;
+        isGrabbed = false;
         
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (isGrabbed)
+            return;
         //move and attack and maybe decision
         Move();
         if (PlayerInRange())
